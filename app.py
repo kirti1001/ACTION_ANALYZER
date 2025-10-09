@@ -1,4 +1,5 @@
 import streamlit as st
+import requests  # For fetching raw HTML from GitHub if not local
 
 # Page configuration for a beautiful, themed app
 st.set_page_config(
@@ -30,18 +31,24 @@ st.markdown("""
         color: white;
         margin: 1rem 0;
     }
-    .go-to-app-btn {
-        background: linear-gradient(135deg, #10b981, #059669);
+    .embed-container {
+        border: 2px solid #3b82f6;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .fallback-btn {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
         color: white;
-        font-size: 1.2rem;
-        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        padding: 0.8rem 1.5rem;
         border-radius: 50px;
         border: none;
         width: 100%;
-        height: 60px;
+        height: 50px;
     }
-    .go-to-app-btn:hover {
-        background: linear-gradient(135deg, #059669, #047857);
+    .fallback-btn:hover {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
         color: white;
     }
     .sidebar .sidebar-content {
@@ -49,6 +56,20 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# Function to load index.html content
+@st.cache_data(ttl=3600)  # Cache for 1 hour to avoid repeated fetches
+def load_html_content():
+    try:
+        # Option 1: Load from local file (if in the same repo for Streamlit Cloud deployment)
+        with open("index.html", "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        # Option 2: Fallback to fetch raw from GitHub (update your repo/commit SHA if needed)
+        github_raw_url = "https://raw.githubusercontent.com/kirti1001/ACTION_ANALYZER/main/index.html"  # Update branch/commit if needed
+        response = requests.get(github_raw_url)
+        response.raise_for_status()
+        return response.text
 
 # Sidebar for additional info (beautiful navigation)
 with st.sidebar:
@@ -66,7 +87,8 @@ with st.sidebar:
     - LLM for actionable recommendations
     
     ### Get Started
-    Click "Go to App" below to launch the analyzer. Ensure camera access is granted!
+    The analyzer is embedded below. Grant camera access when prompted!
+    If embedding has issues (e.g., camera), use the fallback button.
     """)
     
     # Sidebar expander for quick tips
@@ -76,6 +98,7 @@ with st.sidebar:
         - Select analysis duration (3-30 seconds).
         - Perform actions like stretches or walks for best results.
         - View reports in the modal after analysis.
+        - For full screen: Use the fallback button to open in a new tab.
         """)
 
 # Main content: Beautiful header and description
@@ -89,7 +112,7 @@ with col1:
     st.markdown('<div class="feature-box">🔍 **Real-Time Pose Tracking**<br>Detect 33 body landmarks with high accuracy using MediaPipe. Visualize your skeleton overlay in real-time.</div>', unsafe_allow_html=True)
     
 with col2:
-    st.markdown('<div class="feature-box">📊 **Smart Metrics & Reports**<br>Get scores for posture (alignment), balance (stability), symmetry (limb equality), and motion (smoothness). AI generates personalized recommendations.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="feature-box">📊 **Smart Metrics & Reports**<br>Get scores for posture (alignment), balance (stability), symmetry (limb differences), and motion (smoothness). AI generates personalized recommendations.</div>', unsafe_allow_html=True)
 
 # Row for more features
 col3, col4 = st.columns(2)
@@ -103,23 +126,30 @@ with col4:
 # Separator
 st.divider()
 
-# Main button: "Go to App"
-st.markdown("### Ready to Analyze? Launch the App Now!")
-if st.button("🚀 Go to App", key="go_to_app", help="Opens the full analyzer in a new tab"):
-    # Option 1: Open in new tab (recommended for full JS/camera functionality)
-    st.success("Opening the AI Analyzer... If it doesn't open, click [here](https://raw.githubusercontent.com/kirti1001/ACTION_ANALYZER/9ad751ca2ceed93bb16edc437e5ab0792c9637d3/index.html) to view directly.")
-    st.markdown("""
+# Load and embed the index.html as a template
+st.markdown("### 🚀 Launching the Analyzer...")
+html_content = load_html_content()
+
+# Embed the HTML using st.components.v1.html (renders as an iframe-like component)
+# Height=1000px for full view; adjust based on your HTML layout
+st.markdown('<div class="embed-container">', unsafe_allow_html=True)
+components_html = st.components.v1.html(
+    html_content,
+    height=1000,
+    scrolling=True
+)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Fallback button if embedding fails (e.g., JS/camera issues)
+st.markdown("### 🔄 Fallback: Open in Full Browser Tab")
+if st.button("Open Analyzer in New Tab", key="fallback_open", help="Bypasses embedding for full camera/JS support"):
+    st.success("Opening the full analyzer... Click the link if it doesn't auto-open.")
+    st.markdown(f"""
         <script>
-        window.open('index.html', '_blank');
+        window.open('https://raw.githubusercontent.com/kirti1001/ACTION_ANALYZER/main/index.html', '_blank');
         </script>
     """, unsafe_allow_html=True)
-    
-    # Optional: Embed iframe below the button (uncomment if you want to try embedding)
-    # Note: May not work perfectly due to JS/camera restrictions in iframes
-    # st.markdown("""
-    #     <iframe src="https://raw.githubusercontent.com/kirti1001/ACTION_ANALYZER/9ad751ca2ceed93bb16edc437e5ab0792c9637d3/index.html" 
-    #             width="100%" height="800px" style="border: 1px solid #ddd; border-radius: 10px;"></iframe>
-    # """, unsafe_allow_html=True)
+    st.markdown(f"[Direct Link to Analyzer](https://raw.githubusercontent.com/kirti1001/ACTION_ANALYZER/main/index.html)")
 
 # Footer with additional info
 st.markdown("---")
@@ -127,14 +157,13 @@ st.markdown("""
 ### 🌟 Why Use This Analyzer?
 This tool is designed for fitness enthusiasts, physiotherapists, and anyone interested in biomechanics. It provides encouraging, data-driven feedback to improve your daily movements and prevent injuries.
 
-**Built with ❤️ using Streamlit for the landing page and your custom HTML/JS for the core analyzer.**
+**Built with ❤️ using Streamlit for the landing/integration and your custom HTML/JS for the core analyzer.**
 
-If you have the `index.html`, JS, and CSS files locally:
-1. Save them in a folder.
-2. Open `index.html` in a modern browser (Chrome/Firefox recommended).
-3. Grant camera permissions and start analyzing!
+**Deployment Notes**:
+- Embedded via Streamlit Components (JS runs in sandbox).
+- If camera/pose detection doesn't work in embed, use the fallback button.
+- For customizations or issues, check the [GitHub Repo](https://github.com/kirti1001/ACTION_ANALYZER).
 
-For issues or customizations, check the [GitHub Repo](https://github.com/kirti1001/ACTION_ANALYZER).
 """)
 
 # Hide Streamlit menu and footer for a cleaner look
