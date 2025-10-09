@@ -30,7 +30,7 @@ def load_local_file(filename):
 
 def main():
     # Try to load files from GitHub first, then locally
-    css_content = load_github_file('https://github.com/kirti1001/ACTION_ANALYZER/blob/0bd9e447e92fc4ddbf56f2b091dbf5d75469d30b/index.css') or load_local_file('index.css')
+    css_content = load_github_file('https://github.com/kirti1001/ACTION_ANALYZER/blob/584a0fd790554b4635c2fb595d597e9dea6da6fb/index.css') or load_local_file('index.css')
     js_content = load_github_file('https://github.com/kirti1001/ACTION_ANALYZER/blob/0bd9e447e92fc4ddbf56f2b091dbf5d75469d30b/index.js') or load_local_file('index.js')
     html_content = load_local_file('index.html')
     
