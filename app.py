@@ -110,7 +110,7 @@ if st.button("🚀 Go to App", key="go_to_app", help="Opens the full analyzer in
     st.success("Opening the AI Analyzer... If it doesn't open, click [here](https://raw.githubusercontent.com/kirti1001/ACTION_ANALYZER/9ad751ca2ceed93bb16edc437e5ab0792c9637d3/index.html) to view directly.")
     st.markdown("""
         <script>
-        window.open('https://raw.githubusercontent.com/kirti1001/ACTION_ANALYZER/9ad751ca2ceed93bb16edc437e5ab0792c9637d3/index.html', '_blank');
+        window.open('index.html', '_blank');
         </script>
     """, unsafe_allow_html=True)
     
