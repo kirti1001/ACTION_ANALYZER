@@ -49,7 +49,7 @@ st.markdown("""
         [data-testid="stMarkdownContainer"] > div,
         iframe {
             width: 100% !important;
-            height: 2000px !important;  /* Large to show all sections (scrollable) */
+            height: auto !important;  /* Large to show all sections (scrollable) */
             border: none !important;
             margin: 0 !important;
             padding: 0 !important;
