@@ -45,21 +45,7 @@ st.markdown("""
         }
         
         /* Iframe - large height for full content visibility, no hiding */
-        .stMarkdown > div,
-        [data-testid="stMarkdownContainer"] > div,
-        iframe {
-            width: 100% !important;
-            height: auto !important;  /* Large to show all sections (scrollable) */
-            border: none !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            position: relative !important;
-            overflow: auto !important;  /* Scroll to see full page */
-            background: transparent !important;  /* Your gradient shows */
-            /* No blur/scaling conflicts */
-            filter: none !important;
-            transform: none !important;
-        }
+
     </style>
 """, unsafe_allow_html=True)
 
