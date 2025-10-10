@@ -10,8 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"  # Hide sidebar by default
 )
 
-# Hide Streamlit's default UI elements and fix width/scrolling
-# Enhanced CSS for full viewport, reduced errors
+# Hide Streamlit's default UI elements and fix width/scrolling/blur/size
 st.markdown("""
     <style>
         /* Hide Streamlit menu, footer, and other distractions */
@@ -20,47 +19,57 @@ st.markdown("""
         .stApp header {display: none;}
         .stAlert {display: none;}
         
-        /* Minimize focus/event calls to reduce 403 errors */
+        /* Minimize focus/event calls to reduce 403 errors (if any) */
         iframe {
             pointer-events: auto !important;
             tabindex: -1;  /* Reduce focus events */
         }
         
-        /* Full viewport - no padding/margins, force width */
+        /* Full viewport - no padding/margins, force width without oversizing */
         .stApp {
             background-color: #000;  /* Match your app's background if needed */
             margin: 0 !important;
             padding: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
+            overflow: auto !important;  /* Allow page scroll */
         }
         section[data-testid="stAppViewContainer"] {
             padding: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
             margin: 0 !important;
+            overflow: auto !important;
         }
         .block-container {
             padding: 0 !important;
             max-width: none !important;
-            width: 100vw !important;
+            width: 100% !important;  /* Full container width */
             margin: 0 !important;
+            min-height: 100vh !important;
         }
         
-        /* Full-screen embed - targets component and iframe */
+        /* Full-screen embed - natural flow, no fixed positioning, fix blur/size */
         .stMarkdown > div,
         [data-testid="stMarkdownContainer"] > div,
         iframe {
-            width: 100vw !important;
-            height: 200vh !important;  /* Oversize for full scrolling */
+            width: 100% !important;  /* Full width of container */
+            height: 100vh !important;  /* Viewport height, no oversize */
+            min-height: 100vh !important;  /* Expand if content is longer */
             border: none !important;
             margin: 0 !important;
             padding: 0 !important;
-            position: fixed !important;  /* Full overlay */
-            top: 0 !important;
-            left: 0 !important;
-            z-index: 999 !important;  /* On top */
-            overflow: auto !important;  /* Enable scrolling */
+            position: relative !important;  /* Natural flow, no overlay distortion */
+            top: auto !important;
+            left: auto !important;
+            z-index: auto !important;
+            overflow: auto !important;  /* Scrollable without bloating */
+            /* Fix blur and scaling */
+            filter: none !important;
+            backdrop-filter: none !important;
+            transform: none !important;
+            zoom: 1 !important;
+            scale: 1 !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -107,22 +116,31 @@ def load_and_inline_html(html_path, css_path, js_path):
             script_tag = f'<script>{js_content}</script>'
             html_content = html_content.replace('</body>', script_tag + '</body>')
     
-    # Add full-viewport CSS for scrolling/full size (injected into your app)
+    # Add full-viewport CSS for scrolling/full size (injected into your app) - fix blur/size
     full_screen_css = """
         <style>
             html, body {
                 margin: 0 !important;
                 padding: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
+                width: 100% !important;
+                min-height: 100vh !important;  /* Expand naturally, no fixed height */
                 overflow: auto !important;  /* Scroll when needed */
                 box-sizing: border-box;
+                /* Fix blur and scaling */
+                filter: none !important;
+                backdrop-filter: none !important;
+                transform: none !important;
+                zoom: 1 !important;
+                scale: 1 !important;
             }
             /* Target your app's root (adjust '#app' or '.container' to match your HTML) */
             body > * {
                 width: 100% !important;
                 min-height: 100vh !important;
                 overflow: auto !important;
+                /* Fix blur and scaling for content */
+                filter: none !important;
+                transform: none !important;
             }
         </style>
     """
@@ -153,7 +171,3 @@ st.components.v1.html(
     width=None,   # Full width via CSS
     scrolling=True  # Enable scrolling
 )
-
-# Optional: Minimal control (uncomment if needed)
-# if st.button("Refresh"):
-#     st.rerun()
