@@ -115,7 +115,7 @@ st.sidebar.code(full_html[:500] + "..." if len(full_html) > 500 else full_html, 
 # Embed via iframe (large height to show content)
 st.components.v1.html(
     full_html,
-    height=100,  # Large to fit full page (scroll to see bottom)
+    height=3000vh,  # Large to fit full page (scroll to see bottom)
     width=None,
     scrolling=True
 )
