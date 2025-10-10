@@ -201,8 +201,12 @@ body {
 
 /* Fixed Dropdown Styles */
 .areas-dropdown {
+  display: inline-block;
   position: relative;
+  height: auto;
+  width: auto;
 }
+
 
 .areas-dropdown .nav-link {
   display: flex;
