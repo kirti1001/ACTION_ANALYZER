@@ -94,12 +94,7 @@ def load_and_inline_html(html_path, css_path, js_path):
                 overflow: visible !important;  /* Show all sections */
                 background: inherit !important;  /* Your dark gradient */
             }
-            /* Let your layout flow - no forced heights/positions */
-            .navbar, .hero, .main-container, .footer {
-                position: relative !important;  /* Override fixed if conflicting */
-                visibility: visible !important;
-                height: auto !important;
-            }
+            
             /* Basic anti-hide for sections */
             * { visibility: visible !important; }
         </style>
