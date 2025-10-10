@@ -35,6 +35,9 @@ st.markdown("""
             margin: 0 !important;
             overflow: visible !important;
         }
+        section[class="stMain st-emotion-cache-4rsbii e4man111] {
+            height:10vh;
+            }
         .block-container {
             padding: 0 !important;
             max-width: none !important;
