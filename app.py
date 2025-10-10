@@ -28,6 +28,23 @@ st.markdown("""
             height: auto !important;
             overflow: visible !important;  /* Allow content to show */
         }
+        section[data-testid="stAppViewContainer"] {
+            padding: 0 !important;
+            width: 100vw !important;
+            height: 10 !important;  /* Expand as needed */
+            margin: 0 !important;
+            overflow: visible !important;
+        }
+        .block-container {
+            padding: 0 !important;
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            height: 10 !important;  /* No fixed height - let content dictate */
+            overflow: visible !important;
+        }
+        
+        /* Iframe - large height for full content visibility, no hiding */
         
 
     </style>
@@ -115,11 +132,8 @@ st.sidebar.code(full_html[:500] + "..." if len(full_html) > 500 else full_html, 
 # Embed via iframe (large height to show content)
 st.components.v1.html(
     full_html,
-    height=3000vh,  # Large to fit full page (scroll to see bottom)
+    height=3000,  # Large to fit full page (scroll to see bottom)
     width=None,
     scrolling=True
 )
 
-# FALLBACK: No-Iframe Version (Uncomment below and comment out the iframe above)
-# This injects directly - often fixes black screens by avoiding iframe limits
-# st.markdown(full_html, unsafe_allow_html=True)
