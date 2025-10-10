@@ -25,7 +25,7 @@ st.markdown("""
             margin: 0 !important;
             padding: 0 !important;
             width: 100vw !important;
-            height: 100vh !important;
+            height: auto !important;
             overflow: visible !important;  /* Allow content to show */
         }
         section[data-testid="stAppViewContainer"] {
