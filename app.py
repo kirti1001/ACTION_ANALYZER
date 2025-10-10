@@ -28,23 +28,7 @@ st.markdown("""
             height: auto !important;
             overflow: visible !important;  /* Allow content to show */
         }
-        section[data-testid="stAppViewContainer"] {
-            padding: 0 !important;
-            width: 100vw !important;
-            height: 10 !important;  /* Expand as needed */
-            margin: 0 !important;
-            overflow: visible !important;
-        }
-        .block-container {
-            padding: 0 !important;
-            max-width: none !important;
-            width: 100% !important;
-            margin: 0 !important;
-            height: 10 !important;  /* No fixed height - let content dictate */
-            overflow: visible !important;
-        }
         
-        /* Iframe - large height for full content visibility, no hiding */
 
     </style>
 """, unsafe_allow_html=True)
