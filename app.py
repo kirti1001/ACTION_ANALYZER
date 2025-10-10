@@ -10,6 +10,7 @@ st.set_page_config(
 )
 
 # Hide Streamlit's default UI elements for a "full-page" feel
+# Enhanced CSS to fix width, scrolling, and suppress errors
 st.markdown("""
     <style>
         /* Hide Streamlit menu, footer, and other distractions */
@@ -17,87 +18,109 @@ st.markdown("""
         footer {visibility: hidden;}
         .stApp header {display: none;}
         .stAlert {display: none;}
-        /* Make the app full viewport */
+        
+        /* Suppress focus/event errors in embed (fixes 403) */
+        iframe { pointer-events: auto; }  /* Allow interactions */
+        
+        /* Make the app full viewport - no padding/margins */
         .stApp {
-            background-color: #000;  /* Or match your HTML app's background */
+            background-color: #000;  /* Match your app's background if needed */
+            margin: 0 !important;
+            padding: 0 !important;
         }
         section[data-testid="stAppViewContainer"] {
-            padding-top: 0rem;
-            padding-bottom: 0rem;
-            padding-left: 0rem;
-            padding-right: 0rem;
-        }
-        /* Full-screen embed */
-        iframe {
-            width: 100% !important;
+            padding-top: 0rem !important;
+            padding-bottom: 0rem !important;
+            padding-left: 0rem !important;
+            padding-right: 0rem !important;
+            width: 100vw !important;
             height: 100vh !important;
-            border: none !important;
+            margin: 0 !important;
         }
+        .block-container {
+            padding-top: 0rem !important;
+            padding-bottom: 0rem !important;
+            padding-left: 0rem !important;
+            padding-right: 0rem !important;
+            max-width: none !important;
+        }
+        
+        /* Full-screen iframe/embed - targets the component container */
+        .stMarkdown > div > iframe,
+        [data-testid="stMarkdownContainer"] > iframe,
+        iframe {
+            width: 100vw !important;
+            height: 200vh !important;  /* Oversize for full scrollable viewport */
+            border: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: fixed !important;  /* Overlay for true full-screen feel */
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        
+        /* Injected styles for your HTML app (applied via static HTML) */
+        /* Add this to your index.html <head> if needed, or it will be served as-is */
     </style>
 """, unsafe_allow_html=True)
 
-# Function to inline CSS and JS into HTML
-def load_and_inline_html(html_path, css_path, js_path):
-    # Read HTML
+# Paths to static files
+STATIC_PATH = 'index.html'
+
+# Check if static file exists
+if not os.path.exists(STATIC_PATH):
+    st.error(f"{STATIC_PATH} not found! Create a 'static/' folder and place index.html, index.css, index.js there.")
+    st.stop()
+
+# Optional: Inject full-viewport CSS directly into the static HTML for scrolling/full size
+# (Read and modify index.html to add CSS - preserves modules/JS)
+def inject_full_viewport_css(html_path):
     with open(html_path, 'r', encoding='utf-8') as f:
         html_content = f.read()
     
-    # Read and inline CSS (replace <link> if present, or add <style>)
-    if os.path.exists(css_path):
-        with open(css_path, 'r', encoding='utf-8') as f:
-            css_content = f.read()
-        # Inject CSS into <head> (simple replacement; adjust if your HTML has multiple <head>)
-        html_content = html_content.replace('</head>', f'<style>{css_content}</style></head>')
-    
-    # Read and inline JS (replace <script src> if present, or add <script> before </body>)
-    if os.path.exists(js_path):
-        with open(js_path, 'r', encoding='utf-8') as f:
-            js_content = f.read()
-        # Inject JS before </body> (simple replacement; adjust if needed)
-        html_content = html_content.replace('</body>', f'<script>{js_content}</script></body>')
-    
-    # Add full-viewport CSS to make it truly full-page
     full_screen_css = """
         <style>
             html, body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                height: 100vh;
-                overflow: hidden;  /* Prevent scrolling if your app doesn't need it */
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;  /* Full viewport */
+                overflow: auto !important;  /* Enable scrolling when needed */
+                box-sizing: border-box;
             }
-            #app {  /* Adjust '#app' to match your HTML's root element ID/class */
-                width: 100%;
-                height: 100vh;
+            /* Adjust to your app's root element (e.g., #app, .container, body > div) */
+            body > * {  /* Targets direct children of body */
+                width: 100% !important;
+                height: 100% !important;
+                overflow: auto !important;  /* Scrollable content */
             }
         </style>
     """
-    html_content = html_content.replace('</head>', full_screen_css + '</head>')
+    # Inject into <head> (safe even if multiple <head>)
+    if '</head>' in html_content:
+        html_content = html_content.replace('</head>', full_screen_css + '</head>')
+    else:
+        html_content = full_screen_css + html_content  # Fallback: add before <body>
     
     return html_content
 
-# Paths to your files (adjust if they're in a subfolder like 'static/')
-HTML_PATH = 'index.html'
-CSS_PATH = 'index.css'
-JS_PATH = 'index.js'
+# Load and inject CSS into the static HTML (for full viewport/scrolling)
+full_static_html = inject_full_viewport_css(STATIC_PATH)
 
-# Check if files exist
-if not os.path.exists(HTML_PATH):
-    st.error(f"index.html not found! Place it in the same directory as this script.")
-    st.stop()
+# Write the modified HTML temporarily to static/ (for iframe src)
+temp_html_path = 'static/index_full.html'
+with open(temp_html_path, 'w', encoding='utf-8') as f:
+    f.write(full_static_html)
 
-# Load and prepare the HTML with inlined assets
-full_html = load_and_inline_html(HTML_PATH, CSS_PATH, JS_PATH)
-
-# Embed the full HTML app (no height limit for full-page feel)
-st.components.v1.html(
-    full_html,
-    height=None,  # Let it expand to full height (uses injected CSS)
-    width=None,   # Full width
-    scrolling=True  # Allow scrolling if your app needs it
+# Embed via iframe (uses static serving - preserves JS modules, CSS links)
+# src points to the temp full HTML (served at /static/index_full.html)
+st.components.v1.iframe(
+    src="./index.html",  # Relative to Streamlit server
+    width=None,  # Full width (uses CSS)
+    height=2000,  # Large height for scrolling (adjust if needed; CSS handles vh)
+    scrolling=True  # Enable scrolling
 )
 
-# Optional: Add a minimal Streamlit control (e.g., refresh button) if needed
-# This is hidden by default due to CSS, but you can uncomment if useful
-# if st.button("Refresh App"):
-#     st.rerun()
+# Clean up temp file (optional, but keeps things tidy)
+# os.remove(temp_html_path)  # Uncomment if you want to delete after serving
