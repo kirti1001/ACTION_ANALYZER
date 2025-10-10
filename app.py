@@ -129,6 +129,6 @@ st.components.v1.html(
     full_html,
     height=3000,  # Large to fit full page (scroll to see bottom)
     width=None,
-    scrolling=True
+   
 )
 
