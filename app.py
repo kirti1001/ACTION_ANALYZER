@@ -45,6 +45,11 @@ st.markdown("""
         }
         
         /* Iframe - large height for full content visibility, no hiding */
+        iframe {
+    height: 100% !important;
+    width: 100% !important;
+    overflow: auto !important;
+  }
         
 
     </style>
@@ -127,8 +132,9 @@ st.sidebar.code(full_html[:500] + "..." if len(full_html) > 500 else full_html, 
 # Embed via iframe (large height to show content)
 st.components.v1.html(
     full_html,
-    height=4000,  # Large to fit full page (scroll to see bottom)
+    height=3000,  # Large to fit full page (scroll to see bottom)
     width=None,
+    scrollling=True
    
 )
 
