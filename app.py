@@ -31,19 +31,16 @@ st.markdown("""
         section[data-testid="stAppViewContainer"] {
             padding: 0 !important;
             width: 100vw !important;
-            height: auto !important;  /* Expand as needed */
+            height: 10 !important;  /* Expand as needed */
             margin: 0 !important;
             overflow: visible !important;
         }
-        section[class="stMain st-emotion-cache-4rsbii e4man111] {
-            height:10vh;
-            }
         .block-container {
             padding: 0 !important;
             max-width: none !important;
             width: 100% !important;
             margin: 0 !important;
-            height: auto !important;  /* No fixed height - let content dictate */
+            height: 10 !important;  /* No fixed height - let content dictate */
             overflow: visible !important;
         }
         
