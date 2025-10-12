@@ -1,5 +1,5 @@
 const DEBUG = true;
-
+const report= null;
 
 
 function log(...args) {
@@ -552,7 +552,7 @@ Generate a comprehensive, professional movement report for the user. Structure i
 Make it engaging, actionable. Use bullet points/tables for readability. Base analysis strictly on data—be positive and encouraging.`;
 
     // Use Puter.js AI instead of backend API call
-    let report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+    report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
 
 //     //deepseek----------------
 //     // Using fetch to call DeepSeek API
