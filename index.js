@@ -1,4 +1,8 @@
 const DEBUG = true;
+const IS_STREAMLIT = typeof window !== 'undefined' && (window.parent !== window || window.location.href.includes('streamlit'));
+const USE_PUTER = !IS_STREAMLIT && typeof puter !== 'undefined'; // Only use if not in iframe/Streamlit and puter is loaded
+
+
 
 function log(...args) {
   if (DEBUG) console.log('[AI Analyzer]', ...args);
@@ -524,6 +528,7 @@ async function finalizeAnalysis() {
   
 
   // Use Puter.js for LLM processing (no backend needed)
+  if(USE_PUTER){
   try {
     // Construct the same prompt you were using in the backend
     const prompt = `You are an expert in human movement analysis and biomechanics.
@@ -565,6 +570,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
     log('Falling back to local report generation');
     // Fallback: Generate local report
     // report = generateReport();  // static report
+  }
   }
 
   // Final averages (update UI even if LLM fails)
