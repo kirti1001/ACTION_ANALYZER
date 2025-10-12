@@ -130,7 +130,7 @@ st.sidebar.write(f"HTML Length: {len(full_html)} characters")  # Should be >1000
 st.sidebar.code(full_html[:500] + "..." if len(full_html) > 500 else full_html, language="html")  # Preview first 500 chars
 
 # Embed via iframe (large height to show content)
-st.components.v1.html(
+st.components.v2.html(
     full_html,
     height=3000,  # Large to fit full page (scroll to see bottom)
     width=None,
