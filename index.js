@@ -553,9 +553,6 @@ Generate a comprehensive, professional movement report for the user. Structure i
 Make it engaging, actionable. Use bullet points/tables for readability. Base analysis strictly on data—be positive and encouraging.`;
 
     // Use Puter.js AI instead of backend API call
-    const puter= require('puter.js');
-    puter.configure({ githubToken: process.env.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 });
-    
     report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
     // Store the report and show the report section
     currentReport = report;
