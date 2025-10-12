@@ -21,7 +21,6 @@ const CONNECTIONS = [
   [23,24],[23,25],[25,27],[24,26],[26,28],
   [0,23],[0,24],[11,23],[11,12],[12,24]
 ];
-let report = null;
 
 // Throttle for efficiency
 function throttle(fn, limit) {
@@ -553,7 +552,7 @@ Generate a comprehensive, professional movement report for the user. Structure i
 Make it engaging, actionable. Use bullet points/tables for readability. Base analysis strictly on data—be positive and encouraging.`;
 
     // Use Puter.js AI instead of backend API call
-    report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+    let report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
 
 //     //deepseek----------------
 //     // Using fetch to call DeepSeek API
