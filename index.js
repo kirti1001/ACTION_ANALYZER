@@ -553,26 +553,26 @@ Generate a comprehensive, professional movement report for the user. Structure i
 Make it engaging, actionable. Use bullet points/tables for readability. Base analysis strictly on data—be positive and encouraging.`;
 
     // Use Puter.js AI instead of backend API call
-    //report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+    report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
 
-    //deepseek----------------
-    // Using fetch to call DeepSeek API
-const response = await fetch('https://api.deepseek.com/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `action`
-        },
-        body: JSON.stringify({
-            model: "deepseek-chat", // or other available models
-            messages: [
-                {role: "user", content: prompt}
-            ]
-        })
-    });
+//     //deepseek----------------
+//     // Using fetch to call DeepSeek API
+// const response = await fetch('https://api.deepseek.com/chat/completions', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `action`
+//         },
+//         body: JSON.stringify({
+//             model: "deepseek-chat", // or other available models
+//             messages: [
+//                 {role: "user", content: prompt}
+//             ]
+//         })
+//     });
     
-    const data = await response.json();
-    report = data.choices[0].message.content;
+//     const data = await response.json();
+//     report = data.choices[0].message.content;
 
     
     // Store the report and show the report section
