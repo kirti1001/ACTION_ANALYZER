@@ -4,7 +4,16 @@ import base64  # For base64-encoding JS to fix MIME/module issues
 from dotenv import load_dotenv
 load_dotenv()
 
-api_key =  os.environ.get("SKVISION")  # apikey fetch
+ try:
+        if hasattr(st, 'secrets') and 'SKVISION' in st.secrets:
+            api_key = st.secrets['SKVISION']
+            if api_key:
+                return api_key
+    except:
+        pass
+
+# Get API key
+api_key= get_api_key()
 
 # Page config for full-width layout (no centering)
 st.set_page_config(
