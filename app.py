@@ -16,12 +16,6 @@ def get_api_key():
     except Exception as e:
         st.sidebar.error(f"Secrets error: {e}")
     
-    # Fallback to environment variable
-    api_key = os.environ.get("SKVISION")
-    if api_key:
-        return api_key
-    
-    return None  # Explicitly return None if not found
 
 # Get API key
 api_key = get_api_key()
