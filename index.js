@@ -754,7 +754,7 @@ function showReportModal(reportContent) {
   currentReport = reportContent;
   
   // Format the report content with HTML
-  contentEl.innerHTML = reportContent;
+  contentEl.innerHTML = contentEl.innerHTML = `<div style="white-space: pre-wrap; line-height: 1.6;">${reportContent}</div>`;;
   modal.style.display = 'block';
 
   // Close handlers
