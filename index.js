@@ -557,7 +557,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
     report = await callGroqAPI(API_KEY, prompt, model);
     
     // Store the report and show the report section
-    currentReport = report;
+    currentReport = report.content;
     const reportSection = document.getElementById('report-section');
     if (reportSection) {
       reportSection.style.display = 'block';
