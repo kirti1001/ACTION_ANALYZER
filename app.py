@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_api_key():
-    api_key = None
+    api_key = 'dsfsf'
     
     try:
         # if hasattr(st, 'secrets') and 'SKVISION' in st.secrets:
