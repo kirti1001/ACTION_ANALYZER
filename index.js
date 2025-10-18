@@ -551,7 +551,10 @@ Generate a comprehensive, professional movement report for the user. Structure i
 Make it engaging, actionable. Use bullet points/tables for readability. Base analysis strictly on data—be positive and encouraging.`;
 
     // Use Puter.js AI instead of backend API call
-    report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+    // report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+    const apiKey = process.env.skvision;
+    report = await callGroqAPI(apiKey, prompt, model);
+    
     // Store the report and show the report section
     currentReport = report;
     const reportSection = document.getElementById('report-section');
@@ -577,6 +580,56 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
     updateMetricUI('motion', avgPosture);
   }
 
+  // Function to call Groq API
+            async function callGroqAPI(apiKey, prompt, model) {
+                const url = 'https://api.groq.com/openai/v1/chat/completions';
+                
+                const requestBody = {
+                    model: 'llama-3.1-8b-instant',
+                    messages: [
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 1024,
+                    top_p: 1,
+                    stream: false
+                };
+                
+                const startTime = performance.now();
+                
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+                    
+                    const endTime = performance.now();
+                    const duration = ((endTime - startTime) / 1000).toFixed(2);
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('API Error Response:', errorText);
+                        throw new Error(`API request failed with status ${response.status}: ${errorText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    return {
+                        content: data.choices && data.choices.length > 0 ? data.choices[0].message.content : 'No response received',
+                        usage: data.usage || {},
+                        duration: duration
+                    };
+                } catch (error) {
+                    throw error;
+                }
+            }
   // Show report in modal
   const reportSection = document.getElementById('report-section');
   if (reportSection) reportSection.style.display = 'block';
