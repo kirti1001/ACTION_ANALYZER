@@ -6,11 +6,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_api_key():
-    api_key = 'dsfsf'
+    api_key = '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'
     
     try:
         # if hasattr(st, 'secrets') and 'SKVISION' in st.secrets:
-            api_key = st.secrets['SKVISION']
+            # api_key = st.secrets['SKVISION']
             if api_key:
                 return api_key
     except Exception as e:
