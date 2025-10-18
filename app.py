@@ -4,7 +4,7 @@ import base64  # For base64-encoding JS to fix MIME/module issues
 from dotenv import load_dotenv
 load_dotenv()
 
-api_key = os.getenv("SKVISION")  # apikey fetch
+api_key =  os.environ.get("SKVISION")  # apikey fetch
 
 # Page config for full-width layout (no centering)
 st.set_page_config(
