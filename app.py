@@ -6,7 +6,6 @@ load_dotenv()
 def get_api_key():
     api_key = None
     
-    api_key = os.environ.get("SKVISION")
     try:
          if hasattr(st, 'secrets') and 'SKVISION' in st.secrets:
              api_key = st.secrets['SKVISION']
