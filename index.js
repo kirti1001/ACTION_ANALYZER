@@ -553,7 +553,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
 
     // Use Puter.js AI instead of backend API call
     // report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });  
-    model= 'openai/gpt-oss-20b'
+    const model= 'openai/gpt-oss-20b'
     report = await callGroqAPI(API_KEY, prompt, model);
     
     // Store the report and show the report section
