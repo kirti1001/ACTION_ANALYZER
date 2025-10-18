@@ -1,4 +1,5 @@
 const DEBUG = true;
+const API_KEY = "__API_KEY_PLACEHOLDER__";
 
 function log(...args) {
   if (DEBUG) console.log('[AI Analyzer]', ...args);
@@ -552,8 +553,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
 
     // Use Puter.js AI instead of backend API call
     // report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
-    const apiKey = process.env.skvision;
-    report = await callGroqAPI(apiKey, prompt, model);
+    report = await callGroqAPI(API_KEY, prompt, model);
     
     // Store the report and show the report section
     currentReport = report;
