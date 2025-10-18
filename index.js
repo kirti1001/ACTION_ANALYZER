@@ -585,7 +585,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
                 const url = 'https://api.groq.com/openai/v1/chat/completions';
                 
                 const requestBody = {
-                    model: 'llama-3.1-8b-instant',
+                    model: 'openai/gpt-oss-20b',
                     messages: [
                         {
                             role: 'user',
