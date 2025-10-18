@@ -9,7 +9,7 @@ def get_api_key():
     api_key = None
     
     try:
-        if hasattr(st, 'secrets') and 'SKVISION' in st.secrets:
+        # if hasattr(st, 'secrets') and 'SKVISION' in st.secrets:
             api_key = st.secrets['SKVISION']
             if api_key:
                 return api_key
