@@ -552,7 +552,8 @@ Generate a comprehensive, professional movement report for the user. Structure i
 Make it engaging, actionable. Use bullet points/tables for readability. Base analysis strictly on data—be positive and encouraging.`;
 
     // Use Puter.js AI instead of backend API call
-    // report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+    // report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });  
+    model= 'openai/gpt-oss-20b'
     report = await callGroqAPI(API_KEY, prompt, model);
     
     // Store the report and show the report section
@@ -585,7 +586,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
                 const url = 'https://api.groq.com/openai/v1/chat/completions';
                 
                 const requestBody = {
-                    model: 'openai/gpt-oss-20b',
+                    model: model,
                     messages: [
                         {
                             role: 'user',
