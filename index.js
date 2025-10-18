@@ -554,7 +554,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
     // Use Puter.js AI instead of backend API call
     // report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });  
     const model= 'openai/gpt-oss-20b'
-    report = await callGroqAPI(prompt, model);
+    report = await callGroqAPI(API_KEY,prompt, model);
     
     // Store the report and show the report section
     currentReport = report.content;
@@ -582,10 +582,9 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
   }
 
   // Function to call Groq API
-            async function callGroqAPI( prompt, model) {
+            async function callGroqAPI(apiKey, prompt, model) {
                 const url = 'https://api.groq.com/openai/v1/chat/completions';
-                const apiKey='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';
-                
+                    
                 const requestBody = {
                     model: model,
                     messages: [
