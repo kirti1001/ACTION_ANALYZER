@@ -1,6 +1,8 @@
 import streamlit as st
 import os
 import base64  # For base64-encoding JS to fix MIME/module issues
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # Page config for full-width layout (no centering)
