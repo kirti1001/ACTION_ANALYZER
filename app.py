@@ -82,7 +82,7 @@ def load_and_inline_html(html_path, css_path, js_path):
         js_data_uri = f"data:text/javascript;base64,{js_b64}"
         html_content = html_content.replace('src="index.js"', f'src="{js_data_uri}"')
         html_content = html_content.replace('src=\'index.js\'', f'src="{js_data_uri}"')
-        api_key = os.getenv("skvision")  # apikey fetch
+        api_key = os.getenv("SKVISION")  # apikey fetch
         js_content = js_content.replace("__API_KEY_PLACEHOLDER__", api_key)
         if 'type="module"' in html_content or 'index.js' in html_content:
             module_script = f'<script type="module" src="{js_data_uri}"></script>'
