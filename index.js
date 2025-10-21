@@ -21,7 +21,6 @@ const CONNECTIONS = [
   [0,23],[0,24],[11,23],[11,12],[12,24]
 ];
 let report = null;
-let currentReport= '';
 
 // Throttle for efficiency
 function throttle(fn, limit) {
@@ -565,6 +564,9 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
     //  }
     
     log('LLM Report generated successfully via GROQ');
+    // if(currentReport){
+    //   showReportModal(currentReport);
+    // }
 
   } catch (err) {
     error('GROQ AI failed:', err);
@@ -636,7 +638,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
   // Show report in modal
   const reportSection = document.getElementById('report-section');
   if (reportSection) reportSection.style.display = 'block';
-  showReportModal(report || 'Analysis complete, but report generation failed. Check console for data.');
+  showReportModal(report.content || 'Analysis complete, but report generation failed. Check console for data.');
 
   
 }
