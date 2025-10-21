@@ -448,36 +448,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     frameData.push(frameDataItem);
     log(`Sampled frame ${frameIndex}s${second} (${frameData.length}/${ANALYSIS_MAX_SAMPLES})`);
 
-    // Optional backend send (no error if 404/offline)
-    // if (typeof fetch !== 'undefined') {
-    //   fetch('/', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ frame: frameDataItem, stage: 'sample' })
-    //   }).catch(err => {
-    //     if (DEBUG) error('Backend sample send failed (offline mode):', err);
-    //   });
-    // }
   }
 
   // Analysis timer (non-blocking, 2 FPS sampling)
   async function startAnalysisTimer(duration) {
     const totalSamples = Math.min(duration * SAMPLING_FPS, ANALYSIS_MAX_SAMPLES);
     let currentSecond = 1, samplesInSecond = 0;
-
-    // Optional backend start (no error if 404)
-    // if (typeof fetch !== 'undefined') {
-    //   try {
-    //     await fetch('/', {
-    //       method: 'POST',
-    //       headers: { 'Content-Type': 'application/json' },
-    //       body: JSON.stringify({ duration, stage: 'start' })
-    //     });
-    //     log('Backend started');
-    //   } catch (err) {
-    //     if (DEBUG) error('Backend start failed (continuing offline):', err);
-    //   }
-    // }
 
     sampleInterval = setInterval(() => {
       if (!isAnalyzing || frameData.length >= totalSamples) {
@@ -553,15 +529,15 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
 
     const model = 'llama-3.1-8b-instant'; // Using a faster model
     
-    // FIX 1: Declare the report variable and await the API call
+    // Declare the report variable and await the API call
     const report = await callGroqAPI(API_KEY, prompt, model);
     
-    // FIX 2: Store the report content properly
+    // Store the report content properly
     currentReport = report.content;
     
     log('LLM Report generated successfully via GROQ');
     
-    // FIX 3: Show the modal with the actual report content
+    //Show the modal with the actual report content
     showReportModal(currentReport);
 
   } catch (err) {
@@ -585,7 +561,7 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
   }
 }
 
-// FIX 4: Complete the callGroqAPI function - add the actual implementation
+// callGroqAPI function
 async function callGroqAPI(apiKey, prompt, model) {
   const url = 'https://api.groq.com/openai/v1/chat/completions';
   
@@ -628,145 +604,6 @@ async function callGroqAPI(apiKey, prompt, model) {
     throw error;
   }
 }
-
-
-  
-// async function finalizeAnalysis() {
-//   isAnalyzing = false;
-//   clearInterval(sampleInterval);
-//   stopCamera(); // Uncomment if you want auto-stop after analysis
-//   const analysisData = {
-//     metadata: {
-//       timestamp: new Date().toISOString(),
-//       duration: parseInt(document.getElementById('time-display')?.textContent || '5'),
-//       totalFrames: frameData.length
-//     },
-//     frames: frameData.slice(0, ANALYSIS_MAX_SAMPLES)
-//   };
-
-//   log('Analysis complete. Frames:', frameData.length);
-//   console.log('Full JSON Data:', JSON.stringify(analysisData, null, 2));
-
-  
-
-//   // Use Puter.js for LLM processing (no backend needed)
-//   try {
-//     // Construct the same prompt you were using in the backend
-//     const prompt = `You are an expert in human movement analysis and biomechanics.
-//     Analyze the following pose detection data from a user's physical activity session (collected via MediaPipe Pose landmarks).
-
-// Data Summary:
-// - Duration: ${analysisData.metadata.duration} seconds
-// - Total Frames: ${analysisData.metadata.totalFrames}
-// - Timestamp: ${analysisData.metadata.timestamp}
-
-// Sample Frame Structure (showing landmarks and features for ${analysisData.frames.length} frames):
-// ${JSON.stringify(analysisData.frames.slice(0, 5), null, 2)}  # First 5 frames as example; analyze all implicitly.
-
-// Key Features Across Frames (computed from landmarks):
-// - Landmarks: 33 body points (e.g., nose, shoulders, hips, knees) with x,y,z coordinates and visibility scores.
-// - Extracted Metrics: shoulder_pitch (degrees), torso_tilt (degrees), joint_velocity (px/s), step_symmetry (difference), quality_score (% visible landmarks).
-
-// Generate a comprehensive, professional movement report for the user. Structure it as follows:
-// 1. **Summary**: Overview of session (e.g., overall posture quality, activity efficiency).
-// 2. **Key Metrics**: Break down averages for posture (shoulder alignment), balance (hip/knee stability), symmetry (limb differences), motion (smoothness/velocity).
-// 3. **Insights**: Analyze patterns (e.g., "High shoulder pitch suggests forward lean—potential back strain risk"). Reference specific data (e.g., avg shoulder_pitch: X°).
-// 4. **Recommendations**: Personalized tips (e.g., "Strengthen core for better balance"). Flag risks (e.g., asymmetry >20% may indicate injury).
-// 5. **Overall Score**: 0-100% efficiency rating.
-
-// Make it engaging, actionable. Use bullet points/tables for readability. Base analysis strictly on data—be positive and encouraging.`;
-
-//     // Use Puter.js AI instead of backend API call
-//     // report = await puter.ai.chat(prompt, { model: "gpt-5-nano" });  
-//     const model= 'openai/gpt-oss-20b'
-//     report = await callGroqAPI(API_KEY,prompt, model);
-    
-//     // Store the report and show the report section
-//     // currentReport = report.content;
-//     // const reportContentEl = document.getElementById('report-content');
-//     //  if (reportContentEl) {
-//     //         reportContentEl.innerHTML = formatReportContent(currentReport);
-//     //  }
-    
-//     log('LLM Report generated successfully via GROQ');
-//     // if(currentReport){
-//     //   showReportModal(currentReport);
-//     // }
-
-//   } catch (err) {
-//     error('GROQ AI failed:', err);
-//     log('Falling back to local report generation');
-//     // Fallback: Generate local report
-//     // report = generateReport();  // static report
-//   }
-
-//   // Final averages (update UI even if LLM fails)
-//   if (frameData.length > 0) {
-//     const avgPosture = frameData.reduce((sum, f) => sum + (100 - Math.abs(f.features?.shoulder_pitch || 0)), 0) / frameData.length;
-//     const avgQuality = frameData.reduce((sum, f) => sum + (f.features?.quality_score || 50), 0) / frameData.length;
-//     updateMetricUI('posture', avgPosture);
-//     updateMetricUI('balance', avgQuality);
-//     updateMetricUI('symmetry', avgQuality);
-//     updateMetricUI('motion', avgPosture);
-//   }
-
-//   // Function to call Groq API
-//   async function callGroqAPI(apiKey, prompt, model) {
-//       const url = 'https://api.groq.com/openai/v1/chat/completions';
-          
-//       const requestBody = {
-//           model: model,
-//           messages: [
-//               {
-//                   role: 'user',
-//                   content: prompt
-//               }
-//           ],
-//           temperature: 0.7,
-//           max_tokens: 1024,
-//           top_p: 1,
-//           stream: false
-//       };
-      
-//       // const startTime = performance.now();
-      
-//       try {
-//           const response = await fetch(url, {
-//               method: 'POST',
-//               headers: {
-//                   'Content-Type': 'application/json',
-//                   'Authorization': `Bearer ${apiKey}`
-//               },
-//               body: JSON.stringify(requestBody)
-//           });
-          
-//           // const endTime = performance.now();
-//           // const duration = ((endTime - startTime) / 1000).toFixed(2);
-          
-//           if (!response.ok) {
-//               const errorText = await response.text();
-//               console.error('API Error Response:', errorText);
-//               throw new Error(`API request failed with status ${response.status}: ${errorText}`);
-//           }
-          
-//           const data = await response.json();
-          
-//           return {
-//               content: data.choices && data.choices.length > 0 ? data.choices[0].message.content : 'No response received',
-//               // usage: data.usage || {},
-//               // duration: duration
-//           };
-//       } catch (error) {
-//           throw error;
-//       }
-//   }
-//   // Show report in modal
-//   const reportSection = document.getElementById('report-section');
-//   if (reportSection) reportSection.style.display = 'block';
-//   showReportModal(report.content || 'Analysis complete, but report generation failed. Check console for data.');
-
-  
-// }
 
   // Fallback local report generation (your original function, now used only on error)
   function generateReport() {
@@ -844,7 +681,6 @@ Generated by AI Critical Action Analyzer | Stay Active & Balanced! 🚀
   }
 
   // Modal functions for displaying LLM/local report
-  // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   // Connect the generate report button
   const generateReportBtn = document.getElementById('generate-report-btn');
@@ -1357,5 +1193,4 @@ document.addEventListener('keydown', (e) => {
   // Pre-initialize (non-blocking)
   initSkeleton(); // Setup skeleton (2D fallback if WebGL fails)
   log('AI Critical Action Analyzer fully initialized');
-  log('Ready for analysis. Select timer, click Start, and perform actions in frame.');
 });
