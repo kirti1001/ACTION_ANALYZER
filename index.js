@@ -21,6 +21,7 @@ const CONNECTIONS = [
   [0,23],[0,24],[11,23],[11,12],[12,24]
 ];
 let report = null;
+let currentReport= '';
 
 // Throttle for efficiency
 function throttle(fn, limit) {
@@ -558,14 +559,19 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
     
     // Store the report and show the report section
     currentReport = report.content;
+    const reportContentEl = document.getElementById('report-content');
+     if (reportContentEl) {
+            reportContentEl.innerHTML = formatReportContent(currentReport);
+     }
+    
     const reportSection = document.getElementById('report-section');
     if (reportSection) {
       reportSection.style.display = 'block';
     }
-    log('LLM Report generated successfully via Puter.js');
+    log('LLM Report generated successfully via GROQ');
 
   } catch (err) {
-    error('Puter.js AI failed:', err);
+    error('GROQ AI failed:', err);
     log('Falling back to local report generation');
     // Fallback: Generate local report
     // report = generateReport();  // static report
@@ -582,55 +588,55 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
   }
 
   // Function to call Groq API
-            async function callGroqAPI(apiKey, prompt, model) {
-                const url = 'https://api.groq.com/openai/v1/chat/completions';
-                    
-                const requestBody = {
-                    model: model,
-                    messages: [
-                        {
-                            role: 'user',
-                            content: prompt
-                        }
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 1024,
-                    top_p: 1,
-                    stream: false
-                };
-                
-                const startTime = performance.now();
-                
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${apiKey}`
-                        },
-                        body: JSON.stringify(requestBody)
-                    });
-                    
-                    const endTime = performance.now();
-                    const duration = ((endTime - startTime) / 1000).toFixed(2);
-                    
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('API Error Response:', errorText);
-                        throw new Error(`API request failed with status ${response.status}: ${errorText}`);
-                    }
-                    
-                    const data = await response.json();
-                    
-                    return {
-                        content: data.choices && data.choices.length > 0 ? data.choices[0].message.content : 'No response received',
-                        usage: data.usage || {},
-                        duration: duration
-                    };
-                } catch (error) {
-                    throw error;
-                }
-            }
+  async function callGroqAPI(apiKey, prompt, model) {
+      const url = 'https://api.groq.com/openai/v1/chat/completions';
+          
+      const requestBody = {
+          model: model,
+          messages: [
+              {
+                  role: 'user',
+                  content: prompt
+              }
+          ],
+          temperature: 0.7,
+          max_tokens: 1024,
+          top_p: 1,
+          stream: false
+      };
+      
+      // const startTime = performance.now();
+      
+      try {
+          const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${apiKey}`
+              },
+              body: JSON.stringify(requestBody)
+          });
+          
+          // const endTime = performance.now();
+          // const duration = ((endTime - startTime) / 1000).toFixed(2);
+          
+          if (!response.ok) {
+              const errorText = await response.text();
+              console.error('API Error Response:', errorText);
+              throw new Error(`API request failed with status ${response.status}: ${errorText}`);
+          }
+          
+          const data = await response.json();
+          
+          return {
+              content: data.choices && data.choices.length > 0 ? data.choices[0].message.content : 'No response received',
+              // usage: data.usage || {},
+              // duration: duration
+          };
+      } catch (error) {
+          throw error;
+      }
+  }
   // Show report in modal
   const reportSection = document.getElementById('report-section');
   if (reportSection) reportSection.style.display = 'block';
@@ -736,6 +742,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Event listener for closing the report section
+document.getElementById('close-report-btn').addEventListener('click', () => {
+    const reportSection = document.getElementById('report-section');
+    if (reportSection) {
+        reportSection.style.display = 'none'; // Hide the report section
+    }
+});
+
+
 // Store the latest report globally
 let currentReport = '';
 
@@ -751,11 +766,13 @@ function showReportModal(reportContent) {
   }
 
   // Store the report
-  currentReport = reportContent;
+  // currentReport = reportContent;
   
   // Format the report content with HTML
-  contentEl.innerHTML = contentEl.innerHTML = `<div style="white-space: pre-wrap; line-height: 1.6;">${reportContent}</div>`;;
-  modal.style.display = 'block';
+  contentEl.innerHTML = formatReportContent(reportContent); // Format and set the report content
+  modal.style.display = 'block'; // Show the modal
+  // contentEl.innerHTML = contentEl.innerHTML = `<div style="white-space: pre-wrap; line-height: 1.6;">${reportContent}</div>`;;
+  // modal.style.display = 'block';
 
   // Close handlers
   closeBtn.onclick = closeReportModal;
