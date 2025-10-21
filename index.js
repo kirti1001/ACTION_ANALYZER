@@ -609,7 +609,7 @@ async function callGroqAPI(apiKey, prompt, model) {
   }
 }
 
-  // Fallback local report generation (your original function, now used only on error)
+  // Fallback local report generation
   function generateReport() {
     if (frameData.length === 0) {
       return 'No analysis data available. Run an analysis first.';
@@ -714,9 +714,6 @@ document.getElementById('close-report-btn').addEventListener('click', () => {
 });
 
 
-// Store the latest report globally
-// let currentReport = '';
-
 function showReportModal(reportContent) {
   const modal = document.getElementById('llm-report-modal');
   const contentEl = document.getElementById('llm-report-content');
@@ -727,16 +724,11 @@ function showReportModal(reportContent) {
     alert(reportContent);
     return;
   }
-
-  // Store the report
-  // currentReport = reportContent;
   
   // Format the report content with HTML
   contentEl.innerHTML = reportContent; // Format and set the report content
   modal.style.display = 'block'; // Show the modal
-  // contentEl.innerHTML = contentEl.innerHTML = `<div style="white-space: pre-wrap; line-height: 1.6;">${reportContent}</div>`;;
-  // modal.style.display = 'block';
-
+ 
   // Close handlers
   closeBtn.onclick = closeReportModal;
   modal.onclick = (e) => { 
@@ -747,37 +739,11 @@ function showReportModal(reportContent) {
 // Show stored report when button is clicked
 function showStoredReport() {
   if (currentReport) {
+    console.log(currentReport)
     showReportModal(currentReport);
   } else {
     alert('No report available. Please complete an analysis first.');
   }
-}
-
-// Format the report content with beautiful HTML
-function formatReportContent(reportText) {
-  if (!reportText) return '<p>No report content available.</p>';
-  
-  // Enhanced markdown to HTML conversion
-  let html = reportText
-    // Headers
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    // Bold and Italic
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    // Lists
-    .replace(/^- (.*$)/gim, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-    // Line breaks and paragraphs
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>')
-    // Scores and percentages
-    .replace(/(\d+\/100)/g, '<span class="score-badge">$1</span>')
-    .replace(/(\d+%)/g, '<span class="percentage">$1</span>');
-  
-  // Wrap in container
-  return `<div class="report-content formatted">${html}</div>`;
 }
 
 function closeReportModal() {
