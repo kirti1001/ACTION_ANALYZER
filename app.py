@@ -124,12 +124,12 @@ def load_and_inline_html(html_path, css_path, js_path):
         # Multiple replacement strategies for API key
         replacements = [
             ('__API_KEY_PLACEHOLDER__', api_key),
-            ('const API_KEY = ""', f'const apiKey = "{api_key}"'),
-            ("const apiKey = ''", f'const apiKey = "{api_key}"'),
-            ('let apiKey = ""', f'let apiKey = "{api_key}"'),
-            ('var apiKey = ""', f'var apiKey = "{api_key}"'),
-            ('YOUR_API_KEY_HERE', api_key),
-            ('API_KEY_PLACEHOLDER', api_key)
+            # ('const API_KEY = ""', f'const apiKey = "{api_key}"'),
+            # ("const apiKey = ''", f'const apiKey = "{api_key}"'),
+            # ('let apiKey = ""', f'let apiKey = "{api_key}"'),
+            # ('var apiKey = ""', f'var apiKey = "{api_key}"'),
+            # ('YOUR_API_KEY_HERE', api_key),
+            # ('API_KEY_PLACEHOLDER', api_key)
         ]
         
         for old, new in replacements:
@@ -138,7 +138,7 @@ def load_and_inline_html(html_path, css_path, js_path):
         # Also add as global variable
         api_key_injection = f"""
         // Injected API Key
-        window.GROQ_API_KEY = "{api_key}";
+        window.API_KEY = "{api_key}";
         console.log("API Key injected: {api_key[:8]}...");
         """
         js_content = api_key_injection + js_content
