@@ -942,6 +942,11 @@ document.addEventListener('keydown', (e) => {
   function stopCamera() {
     log('Stopping analysis');
     // Cancel animation frame for immediate stop
+
+     if (ctx && canvas) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    
     if (rafId) {
       cancelAnimationFrame(rafId);
       rafId = null;
