@@ -558,11 +558,11 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
     report = await callGroqAPI(API_KEY,prompt, model);
     
     // Store the report and show the report section
-    currentReport = report.content;
-    const reportContentEl = document.getElementById('report-content');
-     if (reportContentEl) {
-            reportContentEl.innerHTML = formatReportContent(currentReport);
-     }
+    // currentReport = report.content;
+    // const reportContentEl = document.getElementById('report-content');
+    //  if (reportContentEl) {
+    //         reportContentEl.innerHTML = formatReportContent(currentReport);
+    //  }
     
     const reportSection = document.getElementById('report-section');
     if (reportSection) {
@@ -630,8 +630,8 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
           
           return {
               content: data.choices && data.choices.length > 0 ? data.choices[0].message.content : 'No response received',
-              // usage: data.usage || {},
-              // duration: duration
+              usage: data.usage || {},
+              duration: duration
           };
       } catch (error) {
           throw error;
@@ -794,19 +794,27 @@ function showStoredReport() {
 function formatReportContent(reportText) {
   if (!reportText) return '<p>No report content available.</p>';
   
-  // Convert markdown-like formatting to HTML
+  // Enhanced markdown to HTML conversion
   let html = reportText
+    // Headers
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    // Bold and Italic
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/## (.*?)(?=\n|$)/g, '<h3>$1</h3>')
-    .replace(/# (.*?)(?=\n|$)/g, '<h2>$1</h2>')
+    // Lists
+    .replace(/^- (.*$)/gim, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+    // Line breaks and paragraphs
+    .replace(/\n\n/g, '</p><p>')
     .replace(/\n/g, '<br>')
-    .replace(/- (.*?)(?=\n|$)/g, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-    .replace(/(\d+\/100)/g, '<div class="score">Overall Score: $1</div>')
+    // Scores and percentages
+    .replace(/(\d+\/100)/g, '<span class="score-badge">$1</span>')
     .replace(/(\d+%)/g, '<span class="percentage">$1</span>');
   
-  return html;
+  // Wrap in container
+  return `<div class="report-content formatted">${html}</div>`;
 }
 
 function closeReportModal() {
