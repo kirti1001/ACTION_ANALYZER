@@ -530,7 +530,7 @@ Generate a comprehensive, professional movement report for the user. Structure i
 
 Make it engaging, actionable. Use bullet points/tables for readability. Base analysis strictly on data—be positive and encouraging.`;
 
-    const model = 'openai/gpt-oss-120b'; // Using a faster model
+    const model = 'whisper-large-v3'; // Using a faster model
     
     // Declare the report variable and await the API call
     const report = await callGroqAPI(API_KEY, prompt, model);
