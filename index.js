@@ -23,7 +23,7 @@ const CONNECTIONS = [
   [23,24],[23,25],[25,27],[24,26],[26,28],
   [0,23],[0,24],[11,23],[11,12],[12,24]
 ];
-const currentReport = null;
+let currentReport = null;
 
 // Throttle for efficiency
 function throttle(fn, limit) {
