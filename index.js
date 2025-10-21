@@ -630,8 +630,8 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
           
           return {
               content: data.choices && data.choices.length > 0 ? data.choices[0].message.content : 'No response received',
-              usage: data.usage || {},
-              duration: duration
+              // usage: data.usage || {},
+              // duration: duration
           };
       } catch (error) {
           throw error;
