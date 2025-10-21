@@ -23,7 +23,7 @@ const CONNECTIONS = [
   [23,24],[23,25],[25,27],[24,26],[26,28],
   [0,23],[0,24],[11,23],[11,12],[12,24]
 ];
-let currentReport = null;
+const currentReport = null;
 
 // Throttle for efficiency
 function throttle(fn, limit) {
@@ -506,7 +506,8 @@ async function finalizeAnalysis() {
   if (reportSection) reportSection.style.display = 'block';
 
   try {
-    const prompt = `You are an expert in human movement analysis and biomechanics.
+    const prompt=`hello `
+    const TEXT = `You are an expert in human movement analysis and biomechanics.
     Analyze the following pose detection data from a user's physical activity session (collected via MediaPipe Pose landmarks).
 
 Data Summary:
