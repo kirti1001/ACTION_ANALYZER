@@ -564,10 +564,6 @@ Make it engaging, actionable. Use bullet points/tables for readability. Base ana
     //         reportContentEl.innerHTML = formatReportContent(currentReport);
     //  }
     
-    const reportSection = document.getElementById('report-section');
-    if (reportSection) {
-      reportSection.style.display = 'block';
-    }
     log('LLM Report generated successfully via GROQ');
 
   } catch (err) {
@@ -769,7 +765,7 @@ function showReportModal(reportContent) {
   // currentReport = reportContent;
   
   // Format the report content with HTML
-  contentEl.innerHTML = formatReportContent(reportContent); // Format and set the report content
+  contentEl.innerHTML = reportContent; // Format and set the report content
   modal.style.display = 'block'; // Show the modal
   // contentEl.innerHTML = contentEl.innerHTML = `<div style="white-space: pre-wrap; line-height: 1.6;">${reportContent}</div>`;;
   // modal.style.display = 'block';
