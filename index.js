@@ -1,8 +1,8 @@
 const DEBUG = true;
 const API_KEY = "__API_KEY_PLACEHOLDER__";
-if (window.API_KEY) {
-        return window.API_KEY;
-    }
+// if (window.API_KEY) {
+//         return window.API_KEY;
+//     }
 
 function log(...args) {
   if (DEBUG) console.log('[AI Analyzer]', ...args);
