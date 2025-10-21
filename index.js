@@ -23,7 +23,7 @@ const CONNECTIONS = [
   [23,24],[23,25],[25,27],[24,26],[26,28],
   [0,23],[0,24],[11,23],[11,12],[12,24]
 ];
-// let report = null;
+let currentReport = null;
 
 // Throttle for efficiency
 function throttle(fn, limit) {
@@ -714,7 +714,7 @@ document.getElementById('close-report-btn').addEventListener('click', () => {
 
 
 // Store the latest report globally
-let currentReport = '';
+// let currentReport = '';
 
 function showReportModal(reportContent) {
   const modal = document.getElementById('llm-report-modal');
