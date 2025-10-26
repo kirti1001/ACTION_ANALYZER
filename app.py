@@ -5,11 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def get_api_key():
-    # api_key = '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'
-    
+def get_api_key():    
     try:
-        # if hasattr(st, 'secrets') and 'SKVISION' in st.secrets:
             api_key = st.secrets['skvision']
             if api_key:
                 return api_key
@@ -124,12 +121,6 @@ def load_and_inline_html(html_path, css_path, js_path):
         # Multiple replacement strategies for API key
         replacements = [
             ('__API_KEY_PLACEHOLDER__', api_key),
-            # ('const API_KEY = ""', f'const apiKey = "{api_key}"'),
-            # ("const apiKey = ''", f'const apiKey = "{api_key}"'),
-            # ('let apiKey = ""', f'let apiKey = "{api_key}"'),
-            # ('var apiKey = ""', f'var apiKey = "{api_key}"'),
-            # ('YOUR_API_KEY_HERE', api_key),
-            # ('API_KEY_PLACEHOLDER', api_key)
         ]
         
         for old, new in replacements:
