@@ -1,8 +1,5 @@
 const DEBUG = true;
 const API_KEY = "__API_KEY_PLACEHOLDER__";
-// if (window.API_KEY) {
-//         return window.API_KEY;
-//     }
 
 function log(...args) {
   if (DEBUG) console.log('[AI Analyzer]', ...args);
@@ -822,17 +819,17 @@ document.addEventListener('keydown', (e) => {
       });
 
       // Wait for video ready
-      await new Promise(resolve => {
-        if (video.readyState >= 1) resolve();
-        else {
-          const onLoaded = () => {
-            video.removeEventListener('loadedmetadata', onLoaded);
-            resolve();
-          };
-          video.addEventListener('loadedmetadata', onLoaded);
-          setTimeout(resolve, 100); // Fallback
-        }
-      });
+      // await new Promise(resolve => {
+      //   if (video.readyState >= 1) resolve();
+      //   else {
+      //     const onLoaded = () => {
+      //       video.removeEventListener('loadedmetadata', onLoaded);
+      //       resolve();
+      //     };
+      //     video.addEventListener('loadedmetadata', onLoaded);
+      //     setTimeout(resolve, 100); // Fallback
+      //   }
+      // });
 
       // Set canvas size (mobile optimized)
       const targetWidth = window.innerWidth < 768 ? 320 : 640;
