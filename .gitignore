@@ -1,12 +1,14 @@
-# Environment variables
+# SECURITY: Never commit API keys and secrets
 .env
 .env.local
 .env.*.local
+.env.production
 
 # Virtual Environment
 venv/
 ENV/
 env/
+.venv/
 
 # IDE
 .vscode/
@@ -40,6 +42,7 @@ wheels/
 
 # Streamlit
 .streamlit/secrets.toml
+.streamlit/config.toml
 
 # Node (if using npm packages)
 node_modules/
@@ -53,3 +56,8 @@ logs/
 # Cache
 .cache/
 *.cache
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
